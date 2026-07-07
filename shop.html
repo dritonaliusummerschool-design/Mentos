@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentos Market Shop</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.2rem 3rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: #0a0e27;
+            margin-bottom: 0.6rem;
+        }
+
+        .header p {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .controls input,
+        .controls select {
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            min-width: 220px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 0.4rem;
+        }
+
+        .product-desc {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            min-height: 44px;
+        }
+
+        .product-price {
+            color: #0a0e27;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.9rem;
+        }
+
+        .buy-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .buy-btn:hover {
+            background: #ff5252;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        @media (max-width: 900px) {
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls input,
+            .controls select {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <h1>Mentos Market Products</h1>
+            <p>Explore fresh items, snacks, drinks, and everyday essentials in one place.</p>
+        </header>
+
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search products...">
+            <select id="categoryFilter">
+                <option value="all">All Products</option>
+                <option value="food">Food</option>
+                <option value="drinks">Drinks</option>
+                <option value="essentials">Essentials</option>
+            </select>
+        </div>
+
+        <div id="productGrid" class="product-grid"></div>
+    </div>
+
+    <script>
+        const products = [
+            {
+                name: 'BUK',
+                description: 'Soft and warm daily bread for breakfast or sandwiches.',
+                price: '30 ден',
+                category: 'food',
+                image: 'https://houseofnasheats.com/wp-content/uploads/2022/02/French-Bread-Recipe-8.jpg'
+            },
+            {
+                name: 'Banana',
+                description: 'Fresh fruits for healthy snacking.',
+                price: '75ден',
+                category: 'food',
+                image: 'banana.jpg'
+            },
+            {
+                name: 'jogurt',
+                description: 'Creamy yogurt cups in a convenient family pack.',
+                price: '110ден',
+                category: 'food',
+                image: 'https://bimilk.mk/wp-content/uploads/2023/12/bitolski-jogurt.png'
+            },
+            {
+                name: 'Leng portokalli 100%',
+                description: 'Refreshing orange juice made for a bright start.',
+                price: '109 ден',
+                category: 'drinks',
+                image: 'https://marketonline.mk/wp-content/uploads/2020/03/1280.jpg'
+                
+            },
+            {
+                name: 'Uje me gaz 1.5L',
+                description: 'Cold sparkling water with a light and crisp taste.',
+                price: '30 ден',
+                category: 'drinks',
+                image: 'https://blejeseshkoj.com/image/cache/catalog/Pijet/IMG_2470-1000x1000h.jpeg'
+            },
+            {
+                name: 'ICE TEA',
+                description: 'Chilled iced tea with a smooth and tasty flavor.',
+                price: '47 ден',
+                category: 'drinks',
+                image: 'https://bigshop.mk/wp-content/uploads/nc/images/thumbs/000/0007517_laden-a-fructal-1l-praska.png'
+            },
+            {
+                name: 'Shampon per duart',
+                description: 'Gentle hand soap for daily home and kitchen use.',
+                price: '79ден',
+                category: 'essentials',
+                image: 'https://europedeals.de/wp-content/uploads/2024/08/Hello-Liquid-Soap-OCEAN-BREEZE-750ml-NEW-600x600.png'
+            },
+            {
+                name: 'Letra per wc',
+                description: 'Strong paper towels for quick and easy cleaning.',
+                price: '225 ден',
+                category: 'essentials',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkS-Rdwb1qPeTGfYzQ7FNuqpvQLNEtQ6t1p0H49Aqmk4nJE_YAhg_noeU&s=10'
+            },
+            {
+                name: 'Duel blue Diamond',
+                description: 'Reliable detergent that keeps clothes fresh and clean.',
+                price: '220 ден',
+                category: 'essentials',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRckBxldv6RnZgLIqRftNrEDgfTDDEu3LYPkeA1nfDifQywyjekZ-Fe8F7c&s=10'
+            }
+        ];
+
+        const productGrid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+
+        function renderProducts() {
+            const searchText = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
+
+            const filtered = products.filter(product => {
+                const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+                const matchesSearch = product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                productGrid.innerHTML = '<div class="empty">No products match your filter.</div>';
+                return;
+            }
+
+            productGrid.innerHTML = filtered.map(product => `
+                <article class="product-card">
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <p class="product-price">${product.price}</p>
+                        <button class="buy-btn">Buy Now</button>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        searchInput.addEventListener('input', renderProducts);
+        categoryFilter.addEventListener('change', renderProducts);
+
+        renderProducts();
+    </script>
+</body>
+</html>
